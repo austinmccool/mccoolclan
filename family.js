@@ -398,7 +398,7 @@ const FAMILY = [
     id: "austin-mccool",
     name: "Austin McCool",
     nickname: null,
-    birth: "1990",
+    birth: "1988",
     birthplace: "Evansville, IN",
     death: null,
     deathplace: null,
