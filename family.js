@@ -1,0 +1,437 @@
+// ============================================================
+//  McCOOL CLAN — FAMILY DATA FILE
+//  This is the ONLY file you need to edit to add/update people.
+//
+//  HOW TO ADD A PERSON:
+//  1. Copy the template below
+//  2. Give them a unique id (lowercase, hyphens, no spaces)
+//  3. Fill in what you know — leave unknowns as null
+//  4. Add their id to their parents' "children" array
+//  5. Add their parents' ids to their "parents" array
+//  6. Save. Done. The tree updates automatically.
+//
+//  PRIMARY SOURCE: Handwritten McCool Family Genealogy document
+//  (research by family member, photographed 2024)
+//  ADDITIONAL SOURCES:
+//  - Norman McCool obituary (Dignity Memorial, 2022)
+//  - Leslie McCool obituary (Burlington Free Press, 2018)
+//  - Lester R. McCool newspaper clipping (findagrave.com)
+//  - George W McCool findagrave.com + FamilySearch GQ81-8RZ
+//  - Thomas McCool findagrave.com Memorial ID 70234991
+// ============================================================
+
+// ── BLANK TEMPLATE ─────────────────────────────────────────
+// {
+//   id: "firstname-lastname",
+//   name: "Full Name",
+//   nickname: null,
+//   birth: "1945",
+//   birthplace: "City, ST",
+//   death: null,
+//   deathplace: null,
+//   bio: "One or two sentences.",
+//   photos: [],
+//   parents: [],
+//   spouses: [],
+//   children: [],
+//   generation: 1,
+// },
+
+const FAMILY = [
+
+  // ── GENERATION 1 — ADAM McCool ───────────────────────────
+  // Source: Handwritten McCool Family Genealogy document
+  // The immigrant. Your founding American ancestor.
+  {
+    id: "adam-mccool",
+    name: "Adam McCool",
+    nickname: null,
+    birth: "ca. 1728",
+    birthplace: "Ireland",
+    death: null,              // not recorded in document
+    deathplace: null,
+    bio: "Where it all begins. Adam crossed from Ireland sometime before 1748, settled in South Carolina, and built a life with his hands as a blacksmith. He and Margaret had three sons — and every McCool in this tree, every farmer, drover, railroader, Coca-Cola chairman, and basketball legend, descends from this one man who arrived with a trade and a name.",
+    photos: [],
+    parents: [],
+    spouses: ["margaret-mcgraw-mccool"],
+    children: ["joseph-mccool"],
+    generation: 1,
+  },
+  {
+    id: "margaret-mcgraw-mccool",
+    name: "Margaret McGraw McCool",
+    nickname: null,
+    birth: null,
+    birthplace: "Ireland (est.)",
+    death: "1814",
+    deathplace: null,
+    bio: "The woman beside the founder. Margaret crossed from Ireland and built a home in South Carolina with Adam, raising three sons in the new world. She outlived her husband and died in 1814, having seen her family take root in American soil.",
+    photos: [],
+    parents: [],
+    spouses: ["adam-mccool"],
+    children: ["joseph-mccool"],
+    generation: 1,
+  },
+
+  // ── GENERATION 2 — JOSEPH McCool ─────────────────────────
+  // Served in the American Revolution
+  {
+    id: "joseph-mccool",
+    name: "Joseph McCool",
+    nickname: null,
+    birth: "1750",
+    birthplace: "South Carolina",
+    death: "1825",
+    deathplace: null,
+    bio: "Born just 25 years before the Revolution broke out, Joseph didn't just witness American independence — he fought for it. South Carolina's backcountry was some of the most brutal Revolutionary War territory in the colonies — guerrilla fighting, Loyalist militias, British raids through the piedmont. Joseph survived it all, came home, and raised four children with Mary. He died in 1825 at 75, old enough to have watched the country he bled for elect its first five presidents.",
+    photos: [],
+    parents: ["adam-mccool", "margaret-mcgraw-mccool"],
+    spouses: ["mary-thomas-mccool"],
+    children: ["william-mccool"],
+    generation: 2,
+  },
+  {
+    id: "mary-thomas-mccool",
+    name: "Mary Thomas McCool",
+    nickname: "Jenn",
+    birth: null,
+    birthplace: "South Carolina (est.)",
+    death: "ca. 1831",
+    deathplace: null,
+    bio: "Known to everyone as Jenn, Mary Thomas married Joseph McCool around 1775 — the same year the Revolution began. She raised four children through the founding years of the country and outlived her husband by six years, dying around 1831.",
+    photos: [],
+    parents: [],
+    spouses: ["joseph-mccool"],
+    children: ["william-mccool"],
+    generation: 2,
+  },
+
+  // ── GENERATION 3 — WILLIAM McCool ────────────────────────
+  // Came to Warrick County, Indiana 1813
+  {
+    id: "william-mccool",
+    name: "William McCool",
+    nickname: null,
+    birth: "ca. 1780",
+    birthplace: "North/South Carolina",
+    death: "1820",
+    deathplace: "Warrick County, IN",
+    bio: "William made the decision that shaped everything that followed. In 1813, he packed up Margaret and their eight children and led them north and west to Warrick County, Indiana — two years before the Battle of Waterloo, one year before the British burned Washington. The frontier he was moving to was real frontier: Indiana had only been a territory for 13 years, and wouldn't achieve statehood until 1816. He was planting the McCool name in ground that was still being fought over. A farmer by trade, he died in 1820 at around 40. He never saw Indiana statehood take hold, never saw what his move would become. But every McCool who followed him to Evansville walked the path he cut.",
+    photos: [],
+    parents: ["joseph-mccool", "mary-thomas-mccool"],
+    spouses: ["margaret-baker-mccool"],
+    children: ["thomas-mccool-1802"],
+    generation: 3,
+  },
+  {
+    id: "margaret-baker-mccool",
+    name: "Margaret Baker McCool",
+    nickname: null,
+    birth: null,
+    birthplace: null,
+    death: null,
+    deathplace: null,
+    bio: "Margaret Baker married William around 1798 and became the mother of eight — five boys and three girls. She made the long journey with William to Warrick County, Indiana in 1813 and raised her family on the frontier after William died young in 1820.",
+    photos: [],
+    parents: [],
+    spouses: ["william-mccool"],
+    children: ["thomas-mccool-1802"],
+    generation: 3,
+  },
+
+  // ── GENERATION 4 — THOMAS McCool ─────────────────────────
+  // Source: Handwritten doc + FindAGrave Memorial ID 70234991
+  {
+    id: "thomas-mccool-1802",
+    name: "Thomas McCool",
+    nickname: null,
+    birth: "1802",
+    birthplace: "South Carolina",
+    death: "Apr 18, 1868",
+    deathplace: "Indiana",
+    bio: "Thomas was eleven years old when William brought the family to Indiana in 1813, young enough to grow up thinking of Warrick County as simply home. He married Melinda Alexander in 1823 and farmed the land his father had settled, raising seven sons. Those years were not quiet ones — the Mexican-American War, the long build toward Civil War, and finally the war itself all moved through Thomas's lifetime. Melinda died in 1862, the year of Shiloh and Antietam, leaving Thomas six more years on his own. He died April 18, 1868, and was buried at Center Cemetery in Chandler, Warrick County — a short walk from the land where he had spent his entire life.",
+    photos: [],
+    parents: ["william-mccool", "margaret-baker-mccool"],
+    spouses: ["melinda-alexander-mccool"],
+    children: ["jordan-mccool"],
+    generation: 4,
+  },
+  {
+    id: "melinda-alexander-mccool",
+    name: "Melinda Alexander McCool",
+    nickname: null,
+    birth: null,
+    birthplace: null,
+    death: "1862",
+    deathplace: null,
+    bio: "Melinda Alexander married Thomas McCool in 1823 and spent nearly four decades building a family and a farm in Warrick County. She raised seven sons — all boys — and died in 1862, six years before Thomas. The McCool line continued through every one of them.",
+    photos: [],
+    parents: [],
+    spouses: ["thomas-mccool-1802"],
+    children: ["jordan-mccool"],
+    generation: 4,
+  },
+
+  // ── GENERATION 5 — JORDAN McCool ─────────────────────────
+  // The missing link — now found. Cattle buyer/drover.
+  {
+    id: "jordan-mccool",
+    name: "Jordan McCool",
+    nickname: null,
+    birth: "1836",
+    birthplace: "Warrick County, IN",
+    death: "1920",
+    deathplace: "Evansville, IN (est.)",
+    bio: "Jordan was a man in motion. Born in Warrick County in 1836, he worked the cattle trade as a buyer and drover at a time when that meant hard, physical work — riding routes through southern Indiana and Kentucky, negotiating livestock deals at stockyards and river landings, moving animals overland in all weather. Evansville in 1861 was a booming Ohio River port, one of the busiest in the midwest, and Jordan moved his family there right as the Civil War was igniting around them. He and Elizabeth raised seven children — six boys and one girl — in a city that was simultaneously processing war wounded and shipping Union supplies south down the river. He lived to 84, dying in 1920 having watched horse-drawn droving give way to railroads, and railroads give way to automobiles.",
+    photos: [],
+    parents: ["thomas-mccool-1802", "melinda-alexander-mccool"],
+    spouses: ["elizabeth-anderson-mccool"],
+    children: ["george-w-mccool"],
+    generation: 5,
+  },
+  {
+    id: "elizabeth-anderson-mccool",
+    name: "Elizabeth Anderson McCool",
+    nickname: null,
+    birth: null,
+    birthplace: null,
+    death: null,
+    deathplace: null,
+    bio: "Elizabeth Anderson married Jordan in 1857 and followed him to Evansville around 1861 when he moved the family from Warrick County. She raised seven children — six boys and one girl — in a city that was still finding its footing. Her maiden name Anderson joins a long line of strong women behind the McCool name.",
+    photos: [],
+    parents: [],
+    spouses: ["jordan-mccool"],
+    children: ["george-w-mccool"],
+    generation: 5,
+  },
+
+  // ── GENERATION 6 — GEORGE W. McCool ──────────────────────
+  // Source: Handwritten doc + FindAGrave + FamilySearch
+  // Married twice — 2 boys with Tillie Stout, 9 boys with Flora Wesseler
+  {
+    id: "george-w-mccool",
+    name: "George W. McCool",
+    nickname: null,
+    birth: "1864",
+    birthplace: "Evansville, IN",
+    death: "Feb 25, 1945",
+    deathplace: "Evansville, IN",
+    bio: "George W. McCool worked the railroads at the height of their power. In the 1880s and 1890s, Evansville was a major rail hub — lines running north to Chicago, east to Louisville, south toward the coal fields — and men like George kept that system running through physical labor, long shifts, and hard weather. He married Tillie Stout in 1888 and had two sons before Tillie died in 1901. He married Flora Wesseler the following year and had nine more — ten sons total, all boys, raised across the turn of the century as Evansville grew from a river-and-rail town into a small industrial city. Two photographs survive: one standing outside a family home with a younger man, another alone in a field wearing a wide-brim hat, reading something, completely at ease — a man who has earned stillness. He died February 25, 1945, at 80-81, having lived through Reconstruction, the Gilded Age, two World Wars, and the entire arc of the railroad era he worked in.",
+    photos: [],
+    parents: ["jordan-mccool", "elizabeth-anderson-mccool"],
+    spouses: ["tillie-stout-mccool", "flora-wesseler-mccool"],
+    children: ["lester-roy-mccool"],  // TODO: add other sons as identified
+    generation: 6,
+  },
+  {
+    id: "tillie-stout-mccool",
+    name: "Tillie Stout McCool",
+    nickname: null,
+    birth: null,
+    birthplace: null,
+    death: "1901",
+    deathplace: null,
+    bio: "Tillie Stout married George W. McCool in 1888 and had two sons with him before her death in 1901. She is the quiet branch of this generation — little is yet known about her life, but her sons carried the line forward.",
+    photos: [],
+    parents: [],
+    spouses: ["george-w-mccool"],
+    children: [],             // TODO: identify the 2 sons from Tillie
+    generation: 6,
+  },
+  {
+    id: "flora-wesseler-mccool",
+    name: "Flora Wesseler McCool",
+    nickname: null,
+    birth: null,
+    birthplace: null,
+    death: null,
+    deathplace: null,
+    bio: "Flora Wesseler married George W. McCool in 1902, the year after Tillie's death, and proceeded to raise nine boys alongside George's two from his first marriage. Eleven children between them in a railroader's household in Evansville. Lester Roy was among her sons.",
+    photos: [],
+    parents: [],
+    spouses: ["george-w-mccool"],
+    children: ["lester-roy-mccool"],  // TODO: add other 8 sons
+    generation: 6,
+  },
+
+  // ── GENERATION 7 — LESTER ROY McCool & Minnie Sasse ──────
+  // Source: Norman McCool obituary + newspaper clipping
+  {
+    id: "lester-roy-mccool",
+    name: "Lester Roy McCool",
+    nickname: "L.R.",
+    birth: null,              // TODO: died age 79 — need death year to calculate
+    birthplace: "Evansville, IN",
+    death: null,              // TODO: find from full clipping
+    deathplace: "Evansville, IN",
+    bio: "L.R. McCool walked into Coca-Cola Bottling Works of Evansville in 1923 and never really left. The 1920s were Coca-Cola's breakout decade nationally — the company was expanding aggressively, and local bottlers were the backbone of that growth. Lester climbed from manager to chairman of the board over decades of work, becoming one of the most prominent businessmen in the city. He was a Shriner, a Rolling Hills Country Club member, a fixture on civic committees. His son Norman put it plainly: the business was his whole life. That wasn't a criticism — it was the generation. Men like Lester Roy built institutions, and the institutions outlasted them. He died at 79 at Deaconess Hospital.",
+    photos: [],
+    parents: ["george-w-mccool", "flora-wesseler-mccool"],
+    spouses: ["minnie-sasse-mccool"],
+    children: ["norman-mccool", "eleanor-mccool-fisher", "ralph-leonard-mccool"],
+    generation: 7,
+  },
+  {
+    id: "minnie-sasse-mccool",
+    name: "Minnie Sasse McCool",
+    nickname: null,
+    birth: null,
+    birthplace: null,
+    death: null,
+    deathplace: null,
+    bio: "Minnie Sasse brought German roots into the McCool line when she married L.R. The Sasse name suggests solid German-American stock — the kind of family that built the midwest alongside the Irish and the Scots. She raised three children: Norman, Eleanor, and Ralph Leonard, and kept the household while L.R. ran his empire at Coca-Cola.",
+    photos: [],
+    parents: [],
+    spouses: ["lester-roy-mccool"],
+    children: ["norman-mccool", "eleanor-mccool-fisher", "ralph-leonard-mccool"],
+    generation: 7,
+  },
+
+  // ── GENERATION 8 — Children of Lester & Minnie ───────────
+  // Source: Norman McCool obituary (Dignity Memorial, 2022)
+  {
+    id: "norman-mccool",
+    name: "Norman McCool",
+    nickname: "Norm",
+    birth: "Sep 19, 1927",
+    birthplace: "Evansville, IN",
+    death: "Jul 2, 2022",
+    deathplace: "Evansville, IN",
+    bio: "Norman McCool could have played for the St. Louis Browns — they offered him a contract. He chose Purdue instead. Before any of that, he was a forward on the Bosse High School Bulldogs when they won back-to-back Indiana State Basketball Championships in 1944 and 1945 — the first Evansville school to ever win the title. In 1945 he personally scored 13 points in the semifinal win that sent Bosse to the championship game. He went on to play in the National Professional Basketball League in 1950 and beat the Harlem Globetrotters in 1951. Inducted into the Indiana Basketball Hall of Fame in 1975. In 1992 he was named Man of the Year by the Friends of Bosse Field for decades of service to youth sports — coaching, building concession stands, sponsoring soccer programs. He returned to lead Coca-Cola Bottling Works and gave to the Evansville Museum, Special Olympics, Deaconess Foundation, and more. Married his bride Maxey McGowan for 73 years. Father of Michael, Jim, Cary, and David (who preceded him in death). Ten grandchildren and 23 great-grandchildren. A great storyteller who loved everything from Opera to Bluegrass to Rock and Roll. He died July 2, 2022, at 94.",
+    photos: [],
+    parents: ["lester-roy-mccool", "minnie-sasse-mccool"],
+    spouses: ["maxey-mcgowan-mccool"],
+    children: ["michael-mccool-norman", "jim-mccool-norman", "cary-mccool-gray", "david-mccool-norman"],
+    generation: 8,
+  },
+  {
+    id: "maxey-mcgowan-mccool",
+    name: "Maxey McGowan McCool",
+    nickname: null,
+    birth: null,
+    birthplace: null,
+    death: null,
+    deathplace: null,
+    bio: "Married Norman McCool for 73 years. Survived him at his death in 2022.",
+    photos: [],
+    parents: [],
+    spouses: ["norman-mccool"],
+    children: ["michael-mccool-norman", "jim-mccool-norman", "cary-mccool-gray", "david-mccool-norman"],
+    generation: 8,
+  },
+  {
+    id: "eleanor-mccool-fisher",
+    name: "Eleanor McCool Fisher",
+    nickname: null,
+    birth: null,
+    birthplace: "Evansville, IN",
+    death: null,
+    deathplace: null,
+    bio: "Daughter of L.R. and Minnie McCool. Married name Fisher. Preceded her brother Norman in death.",
+    photos: [],
+    parents: ["lester-roy-mccool", "minnie-sasse-mccool"],
+    spouses: [],
+    children: [],
+    generation: 8,
+  },
+  {
+    id: "ralph-leonard-mccool",
+    name: "Ralph Leonard McCool",
+    nickname: null,
+    birth: null,
+    birthplace: "Evansville, IN",
+    death: null,
+    deathplace: null,
+    bio: "Son of L.R. and Minnie McCool. Preceded his brother Norman in death. He and Sissy raised ten children in Evansville — Leslie, Thomas, Joe, Martha, Andie, Sally, Samuel, Ubbie, Frederick, and Amy — a household that became the beating heart of this generation of the clan.",
+    photos: [],
+    parents: ["lester-roy-mccool", "minnie-sasse-mccool"],
+    spouses: ["harriet-mccool"],
+    children: ["leslie-mccool", "thomas-mccool", "joe-mccool", "martha-mccool", "andrea-mccool", "sally-mccool", "samuel-mccool", "ralph-louis-mccool", "frederick-mccool", "amy-mccool"],
+    generation: 8,
+  },
+  {
+    id: "harriet-mccool",
+    name: "Harriet Buthod McCool",
+    nickname: "Sissy",
+    birth: null,
+    birthplace: null,
+    death: null,
+    deathplace: null,
+    bio: "Known to everyone as Sissy, Harriet Buthod brought French roots into the McCool line — the Buthod name traces to Alsace-Lorraine, the contested region on the French-German border that changed hands between nations for centuries. The family was Catholic, connected to Evansville's west side parishes, and had come to the city in the late 1930s when oil exploration opened up in southern Indiana. Sissy and Ralph Leonard raised ten children together in Evansville. She was the kind of woman a family builds its identity around.",
+    photos: [],
+    parents: [],
+    spouses: ["ralph-leonard-mccool"],
+    children: ["leslie-mccool", "thomas-mccool", "joe-mccool", "martha-mccool", "andrea-mccool", "sally-mccool", "samuel-mccool", "ralph-louis-mccool", "frederick-mccool", "amy-mccool"],
+    generation: 8,
+  },
+
+
+  // ── GENERATION 9 — Norman McCool's children ───────────────────────
+  { id: "michael-mccool-norman", name: "Michael McCool", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["norman-mccool", "maxey-mcgowan-mccool"], spouses: [], children: [], generation: 9 },
+  { id: "jim-mccool-norman", name: "Jim McCool", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["norman-mccool", "maxey-mcgowan-mccool"], spouses: [], children: [], generation: 9 },
+  { id: "cary-mccool-gray", name: "Cary McCool Gray", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["norman-mccool", "maxey-mcgowan-mccool"], spouses: [], children: [], generation: 9 },
+  { id: "david-mccool-norman", name: "David McCool", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: "Son of Norman and Maxey McCool. Preceded his father in death.", photos: [], parents: ["norman-mccool", "maxey-mcgowan-mccool"], spouses: [], children: [], generation: 9 },
+
+  // ── GENERATION 9 — Children of Ralph Leonard & Sissy ─────────
+  { id: "leslie-mccool", name: "Leslie McCool", nickname: null, birth: "1949", birthplace: "Evansville, IN", death: "2018", deathplace: "Burlington, VT", bio: "Leslie grew up in Evansville, graduated Harrison High School in 1967, and headed to Ball State University. A remarkable artist, committed fantasy sports player, and lifelong student perpetually studying for her shot on Jeopardy. She made her home in Vermont. Everyone who knew her remembered the smile first.", photos: [], parents: ["ralph-leonard-mccool", "harriet-mccool"], spouses: ["joe-rivers"], children: ["augustus-james-brightman", "gracie-rivers"], generation: 9 },
+  { id: "thomas-mccool", name: "Thomas McCool", nickname: null, birth: null, birthplace: "Evansville, IN", death: null, deathplace: null, bio: null, photos: [], parents: ["ralph-leonard-mccool", "harriet-mccool"], spouses: [], children: [], generation: 9 },
+  { id: "joe-mccool", name: "Joseph McCool", nickname: "Joe", birth: null, birthplace: "Evansville, IN", death: null, deathplace: null, bio: null, photos: [], parents: ["ralph-leonard-mccool", "harriet-mccool"], spouses: ["suzanne-eaton-mccool"], children: ["alex-mccool-wepfer", "margaret-mccool-williams"], generation: 9 },
+  { id: "martha-mccool", name: "Martha McCool Thorbeck", nickname: null, birth: null, birthplace: "Evansville, IN", death: null, deathplace: null, bio: null, photos: [], parents: ["ralph-leonard-mccool", "harriet-mccool"], spouses: ["thomas-thorbeck"], children: ["frances-thorbeck-jost"], generation: 9 },
+  { id: "andrea-mccool", name: "Andrea Louise McCool", nickname: "Andie", birth: "1953", birthplace: "Evansville, IN", death: "1983", deathplace: "Evansville, IN", bio: "Andrea Louise — Andie — was born in 1953 and died in Evansville in 1983 at just 30 years old. She is remembered.", photos: [], parents: ["ralph-leonard-mccool", "harriet-mccool"], spouses: [], children: [], generation: 9 },
+  { id: "sally-mccool", name: "Sally McCool Small", nickname: null, birth: null, birthplace: "Evansville, IN", death: null, deathplace: null, bio: null, photos: [], parents: ["ralph-leonard-mccool", "harriet-mccool"], spouses: ["jeff-small"], children: ["sarah-sasse-small", "gus-small", "hattie-small", "sam-small", "ellie-small"], generation: 9 },
+  { id: "samuel-mccool", name: "Samuel McCool", nickname: null, birth: null, birthplace: "Evansville, IN", death: "2009", deathplace: "Lebanon, TN", bio: "Son of Ralph Leonard and Sissy. Moved to Lebanon, Tennessee, where he lived with Roxie and raised two sons, Alan and Cade. Died in 2009.", photos: [], parents: ["ralph-leonard-mccool", "harriet-mccool"], spouses: ["roxie-mccool"], children: ["alan-mccool", "cade-mccool"], generation: 9 },
+  { id: "ralph-louis-mccool", name: "Ralph Louis McCool", nickname: "Ubbie", birth: "1961", birthplace: "Evansville, IN", death: null, deathplace: null, bio: "Known as Ubbie. Born in Evansville in 1961, one of ten children of Ralph Leonard and Sissy. Father of Austin, Martin, and Mitchell.", photos: [], parents: ["ralph-leonard-mccool", "harriet-mccool"], spouses: ["julie-rexing-mccool"], children: ["austin-mccool", "martin-mccool", "mitchell-mccool"], generation: 9 },
+  { id: "frederick-mccool", name: "Frederick McCool", nickname: null, birth: null, birthplace: "Evansville, IN", death: null, deathplace: null, bio: null, photos: [], parents: ["ralph-leonard-mccool", "harriet-mccool"], spouses: ["wendy-weber-mccool"], children: ["sadie-mccool", "annie-mccool"], generation: 9 },
+  { id: "amy-mccool", name: "Amy McCool Henton", nickname: null, birth: null, birthplace: "Evansville, IN", death: null, deathplace: null, bio: null, photos: [], parents: ["ralph-leonard-mccool", "harriet-mccool"], spouses: ["keith-henton"], children: ["dannie-henton", "edie-henton", "andie-henton", "carlie-henton", "lucie-henton"], generation: 9 },
+
+  // ── GENERATION 9 — Spouses ─────────────────────────────────
+  { id: "joe-rivers", name: "Joe Rivers", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: [], spouses: ["leslie-mccool"], children: ["augustus-james-brightman", "gracie-rivers"], generation: 9 },
+  { id: "suzanne-eaton-mccool", name: "Suzanne Eaton McCool", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: [], spouses: ["joe-mccool"], children: ["alex-mccool-wepfer", "margaret-mccool-williams"], generation: 9 },
+  { id: "thomas-thorbeck", name: "Thomas Thorbeck", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: [], spouses: ["martha-mccool"], children: ["frances-thorbeck-jost"], generation: 9 },
+  { id: "jeff-small", name: "Jeff Small", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: [], spouses: ["sally-mccool"], children: ["sarah-sasse-small", "gus-small", "hattie-small", "sam-small", "ellie-small"], generation: 9 },
+  { id: "roxie-mccool", name: "Roxie McCool", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: [], spouses: ["samuel-mccool"], children: ["alan-mccool", "cade-mccool"], generation: 9 },
+  { id: "julie-rexing-mccool", name: "Julie Rexing McCool", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: [], spouses: ["ralph-louis-mccool"], children: ["austin-mccool", "martin-mccool", "mitchell-mccool"], generation: 9 },
+  { id: "wendy-weber-mccool", name: "Wendy Weber McCool", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: [], spouses: ["frederick-mccool"], children: ["sadie-mccool", "annie-mccool"], generation: 9 },
+  { id: "keith-henton", name: "Keith Henton", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: [], spouses: ["amy-mccool"], children: ["dannie-henton", "edie-henton", "andie-henton", "carlie-henton", "lucie-henton"], generation: 9 },
+
+  {
+    id: "austin-mccool",
+    name: "Austin McCool",
+    nickname: null,
+    birth: "1990",
+    birthplace: "Evansville, IN",
+    death: null,
+    deathplace: null,
+    bio: "Tenth generation from Adam McCool of Ireland. Born in Evansville in 1990, now living in Evansville, IN. COO by day, family archivist apparently by night. Built this site so the clan would never have to wonder where they came from.",
+    photos: [],
+    parents: ["ralph-louis-mccool"],
+    spouses: [],
+    children: [],
+    generation: 10,
+  },
+
+  // ── GENERATION 10 — Grandchildren of Ralph & Sissy ───────
+  { id: "augustus-james-brightman", name: "Augustus James Brightman", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["leslie-mccool", "joe-rivers"], spouses: [], children: [], generation: 10 },
+  { id: "gracie-rivers", name: "Gracie Rivers", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["leslie-mccool", "joe-rivers"], spouses: [], children: [], generation: 10 },
+  { id: "alex-mccool-wepfer", name: "Alex McCool Wepfer", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["joe-mccool", "suzanne-eaton-mccool"], spouses: [], children: [], generation: 10 },
+  { id: "margaret-mccool-williams", name: "Margaret McCool Williams", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["joe-mccool", "suzanne-eaton-mccool"], spouses: [], children: [], generation: 10 },
+  { id: "frances-thorbeck-jost", name: "Frances Thorbeck Jost", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["martha-mccool", "thomas-thorbeck"], spouses: [], children: [], generation: 10 },
+  { id: "sarah-sasse-small", name: "Sarah Sasse Small", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["sally-mccool", "jeff-small"], spouses: [], children: [], generation: 10 },
+  { id: "gus-small", name: "Gus Small", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["sally-mccool", "jeff-small"], spouses: [], children: [], generation: 10 },
+  { id: "hattie-small", name: "Hattie Small", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["sally-mccool", "jeff-small"], spouses: [], children: [], generation: 10 },
+  { id: "sam-small", name: "Sam Small", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["sally-mccool", "jeff-small"], spouses: [], children: [], generation: 10 },
+  { id: "ellie-small", name: "Ellie Small", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["sally-mccool", "jeff-small"], spouses: [], children: [], generation: 10 },
+  { id: "alan-mccool", name: "Alan McCool", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["samuel-mccool", "roxie-mccool"], spouses: [], children: [], generation: 10 },
+  { id: "cade-mccool", name: "Cade McCool", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["samuel-mccool", "roxie-mccool"], spouses: [], children: [], generation: 10 },
+  { id: "martin-mccool", name: "Martin McCool", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["ralph-louis-mccool", "julie-rexing-mccool"], spouses: [], children: [], generation: 10 },
+  { id: "mitchell-mccool", name: "Mitchell McCool", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["ralph-louis-mccool", "julie-rexing-mccool"], spouses: [], children: [], generation: 10 },
+  { id: "sadie-mccool", name: "Sadie McCool", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["frederick-mccool", "wendy-weber-mccool"], spouses: [], children: [], generation: 10 },
+  { id: "annie-mccool", name: "Annie McCool", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["frederick-mccool", "wendy-weber-mccool"], spouses: [], children: [], generation: 10 },
+  { id: "dannie-henton", name: "Dannie Henton", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["amy-mccool", "keith-henton"], spouses: [], children: [], generation: 10 },
+  { id: "edie-henton", name: "Edie Henton", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["amy-mccool", "keith-henton"], spouses: [], children: [], generation: 10 },
+  { id: "andie-henton", name: "Andie Henton", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["amy-mccool", "keith-henton"], spouses: [], children: [], generation: 10 },
+  { id: "carlie-henton", name: "Carlie Henton", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["amy-mccool", "keith-henton"], spouses: [], children: [], generation: 10 },
+  { id: "lucie-henton", name: "Lucie Henton", nickname: null, birth: null, birthplace: null, death: null, deathplace: null, bio: null, photos: [], parents: ["amy-mccool", "keith-henton"], spouses: [], children: [], generation: 10 },
+
+
+];

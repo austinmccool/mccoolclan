@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>McCool Clan — Family Tree</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    /* ── RESET & BASE ───────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #0e0d0b;
+      --surface:      #1a1814;
+      --surface2:     #242018;
+      --border:       #3a3428;
+      --gold:         #c9a84c;
+      --gold-light:   #e8c97a;
+      --gold-dim:     #7a6330;
+      --cream:        #f0e8d8;
+      --cream-dim:    #a89880;
+      --text:         #e8dcc8;
+      --text-dim:     #8a7d6a;
+      --green:        #2d4a2d;
+      --green-light:  #4a7c4a;
+      --link:         #c9a84c;
+      --node-w:       160px;
+      --node-h:       72px;
+      --node-r:       6px;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Lato', sans-serif;
+    }
+
+    /* ── HEADER ─────────────────────────────────── */
+    #header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 64px;
+      background: linear-gradient(to bottom, rgba(14,13,11,0.98) 0%, rgba(14,13,11,0.0) 100%);
+      pointer-events: none;
+    }
+
+    #header-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+    }
+
+    #header-sub {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    #controls {
+      pointer-events: all;
+      display: flex;
+      gap: 8px;
+    }
+
+    .ctrl-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--cream-dim);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.75rem;
+      padding: 6px 14px;
+      cursor: pointer;
+      border-radius: 3px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: all 0.15s;
+    }
+    .ctrl-btn:hover {
+      border-color: var(--gold-dim);
+      color: var(--gold-light);
+    }
+
+    /* ── CANVAS ──────────────────────────────────── */
+    #canvas {
+      width: 100%; height: 100%;
+      cursor: grab;
+    }
+    #canvas:active { cursor: grabbing; }
+
+    /* ── TREE NODES ──────────────────────────────── */
+    .node-group { cursor: pointer; }
+
+    .node-rect {
+      width: var(--node-w);
+      height: var(--node-h);
+      rx: var(--node-r);
+      fill: var(--surface);
+      stroke: var(--border);
+      stroke-width: 1.5;
+      transition: stroke 0.2s, fill 0.2s;
+    }
+    .node-group:hover .node-rect,
+    .node-group.active .node-rect {
+      fill: var(--surface2);
+      stroke: var(--gold);
+      stroke-width: 2;
+    }
+
+    .node-accent {
+      width: 3px;
+      height: 40px;
+      x: 0;
+      y: 16px;
+      rx: 2;
+      fill: var(--gold-dim);
+      transition: fill 0.2s;
+    }
+    .node-group:hover .node-accent,
+    .node-group.active .node-accent { fill: var(--gold); }
+
+    .node-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 13px;
+      fill: var(--cream);
+      font-weight: 700;
+    }
+    .node-dates {
+      font-family: 'Lato', sans-serif;
+      font-size: 10px;
+      fill: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+    .node-place {
+      font-family: 'Lato', sans-serif;
+      font-size: 10px;
+      fill: var(--gold-dim);
+      font-style: italic;
+    }
+
+    /* ── LINKS ───────────────────────────────────── */
+    .link-parent {
+      fill: none;
+      stroke: var(--border);
+      stroke-width: 1.5;
+    }
+    .link-spouse {
+      fill: none;
+      stroke: var(--gold-dim);
+      stroke-width: 1;
+      stroke-dasharray: 4 3;
+    }
+
+    /* ── GEN LABEL ───────────────────────────────── */
+    .gen-label {
+      font-family: 'Lato', sans-serif;
+      font-size: 10px;
+      fill: #3a3428;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    /* ── PROFILE PANEL ───────────────────────────── */
+    #panel {
+      position: fixed;
+      top: 0; right: 0;
+      width: 340px;
+      height: 100%;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    #panel.open { transform: translateX(0); }
+
+    #panel-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      width: 32px; height: 32px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      line-height: 1;
+      z-index: 10;
+    }
+    #panel-close:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+    #panel-photos {
+      width: 100%;
+      min-height: 200px;
+      max-height: 220px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .photo-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--border);
+    }
+    .photo-placeholder svg { width: 48px; height: 48px; opacity: 0.4; }
+    .photo-placeholder span {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .photo-gallery {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+    .photo-gallery::-webkit-scrollbar { display: none; }
+    .photo-gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+    }
+
+    .photo-count {
+      position: absolute;
+      bottom: 8px; right: 8px;
+      background: rgba(0,0,0,0.6);
+      color: var(--cream-dim);
+      font-size: 0.65rem;
+      padding: 3px 8px;
+      border-radius: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    #panel-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 24px 40px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    #panel-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.2;
+      margin-bottom: 2px;
+      padding-right: 40px;
+    }
+
+    #panel-nickname {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--gold-dim);
+      margin-bottom: 12px;
+    }
+
+    .panel-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 8px;
+      font-size: 0.8rem;
+    }
+    .meta-label {
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.68rem;
+      min-width: 52px;
+      padding-top: 1px;
+    }
+    .meta-value { color: var(--text); }
+
+    #panel-bio {
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: var(--cream-dim);
+      margin-bottom: 20px;
+    }
+
+    .rel-section {
+      margin-bottom: 16px;
+    }
+    .rel-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--gold-dim);
+      margin-bottom: 8px;
+    }
+    .rel-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .rel-link {
+      font-size: 0.78rem;
+      color: var(--gold);
+      background: rgba(201, 168, 76, 0.08);
+      border: 1px solid var(--gold-dim);
+      padding: 4px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      transition: all 0.15s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .rel-link:hover {
+      background: rgba(201, 168, 76, 0.18);
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+
+    /* ── LEGEND ──────────────────────────────────── */
+    #legend {
+      position: fixed;
+      bottom: 24px; left: 24px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .legend-line {
+      width: 28px;
+      height: 1px;
+      background: var(--border);
+    }
+    .legend-line.dashed {
+      background: repeating-linear-gradient(90deg, var(--gold-dim) 0, var(--gold-dim) 4px, transparent 4px, transparent 7px);
+    }
+
+    /* ── HINT ────────────────────────────────────── */
+    #hint {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+      text-align: right;
+      pointer-events: none;
+    }
+
+    /* ── MOBILE ──────────────────────────────────── */
+    @media (max-width: 600px) {
+      #panel { width: 100%; }
+      #header-title { font-size: 1.1rem; }
+      .ctrl-btn { padding: 5px 10px; font-size: 0.65rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <div>
+    <div id="header-title">McCool Clan</div>
+    <div id="header-sub">Family Tree · Est. Ireland</div>
+  </div>
+  <div id="controls">
+    <button class="ctrl-btn" id="btn-fit">Fit All</button>
+    <button class="ctrl-btn" id="btn-reset">Reset</button>
+  </div>
+</div>
+
+<!-- MAIN CANVAS -->
+<svg id="canvas">
+  <defs>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1a1814" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+  <g id="tree-root"></g>
+</svg>
+
+<!-- PROFILE PANEL -->
+<div id="panel">
+  <button id="panel-close">✕</button>
+  <div id="panel-photos"></div>
+  <div id="panel-body">
+    <div id="panel-name"></div>
+    <div id="panel-nickname"></div>
+    <div class="panel-meta" id="panel-meta"></div>
+    <div id="panel-bio"></div>
+    <div id="panel-rels"></div>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div id="legend">
+  <div class="legend-item"><div class="legend-line"></div> Parent / Child</div>
+  <div class="legend-item"><div class="legend-line dashed"></div> Spouse</div>
+</div>
+
+<div id="hint">Scroll to zoom · Drag to pan · Click a node</div>
+
+<script src="family.js"></script>
+<script>
+// ── CONSTANTS ──────────────────────────────────────────────
+const NODE_W     = 180;
+const NODE_H_MIN = 72;    // minimum node height — grows for long names
+const GEN_GAP    = 180;   // vertical space between generations
+const NODE_GAP   = 28;    // horizontal gap between siblings
+const SPOUSE_GAP = 200;   // horizontal gap between spouses
+const NAME_MAX_W = 148;   // max pixel width for name text before wrapping
+const CHARS_PER_LINE = 20; // approx chars per line for wrapping
+
+// Split a name into lines that fit the node width
+function wrapName(name) {
+  const words = name.split(' ');
+  const lines = [];
+  let current = '';
+  for (const word of words) {
+    const test = current ? current + ' ' + word : word;
+    if (test.length > CHARS_PER_LINE && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = test;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
+// Compute node height based on name line count
+function nodeHeight(name) {
+  const lines = wrapName(name);
+  return lines.length > 1 ? NODE_H_MIN + (lines.length - 1) * 14 : NODE_H_MIN;
+}
+
+// ── INDEX FAMILY DATA ─────────────────────────────────────
+const byId = {};
+FAMILY.forEach(p => byId[p.id] = p);
+
+// ── LAYOUT ENGINE ─────────────────────────────────────────
+// Recursive subtree layout: each node is positioned based on the span
+// of its descendants, so children cluster under their parents.
+//
+// Algorithm:
+//  1. Find all root nodes (no parents, or parents in an earlier gen)
+//  2. Recursively compute the "width" each subtree needs
+//  3. Assign x positions bottom-up so siblings are spread under their parents
+//  4. Y position is simply generation index * GEN_GAP
+
+function computeLayout() {
+  const genNums = [...new Set(FAMILY.map(p => p.generation))].sort((a,b)=>a-b);
+  const genIndex = {};
+  genNums.forEach((g, i) => genIndex[g] = i);
+
+  // Build a map: for each person, who are their children (union from data)
+  const childrenOf = {};
+  FAMILY.forEach(p => { childrenOf[p.id] = []; });
+  FAMILY.forEach(p => {
+    (p.children || []).forEach(cid => {
+      if (childrenOf[cid] !== undefined) {
+        if (!childrenOf[p.id].includes(cid)) childrenOf[p.id].push(cid);
+      }
+    });
+  });
+
+  // A "family unit" is a person + their same-generation spouses.
+  // We treat units as the atomic layout node.
+  // Build units: each unit has a primary (first encountered) and spouses.
+  const unitOf = {};   // id -> unit id (primary person's id)
+  const units  = {};   // unit id -> { members: [], children: [] }
+  const placed = new Set();
+
+  FAMILY.forEach(p => {
+    if (placed.has(p.id)) return;
+    placed.add(p.id);
+    const unit = { members: [p], children: [] };
+    units[p.id] = unit;
+    unitOf[p.id] = p.id;
+
+    (p.spouses || []).forEach(sid => {
+      const s = byId[sid];
+      if (s && s.generation === p.generation && !placed.has(sid)) {
+        placed.add(sid);
+        unit.members.push(s);
+        unitOf[sid] = p.id;
+      }
+    });
+  });
+
+  // Wire unit children: a unit's children are the units of its members' children
+  const unitChildrenSet = {};
+  Object.keys(units).forEach(uid => unitChildrenSet[uid] = new Set());
+
+  FAMILY.forEach(p => {
+    const uid = unitOf[p.id];
+    (p.children || []).forEach(cid => {
+      const childUnit = unitOf[cid];
+      if (childUnit && childUnit !== uid) {
+        unitChildrenSet[uid].add(childUnit);
+      }
+    });
+  });
+  Object.keys(units).forEach(uid => {
+    units[uid].children = [...unitChildrenSet[uid]];
+  });
+
+  // Find root units (no parent units, or parents in strictly earlier gens)
+  const hasParentUnit = new Set();
+  Object.keys(units).forEach(uid => {
+    units[uid].children.forEach(cuid => hasParentUnit.add(cuid));
+  });
+  const roots = Object.keys(units).filter(uid => !hasParentUnit.has(uid));
+
+  // Compute subtree width recursively (in unit-widths)
+  // Unit width = number of members * NODE_W + (members-1) * NODE_GAP + spouse gap
+  const UNIT_PADDING = NODE_GAP * 2; // extra breathing room between sibling units
+
+  function unitWidth(uid) {
+    const u = units[uid];
+    const selfW = u.members.length * NODE_W + (u.members.length - 1) * NODE_GAP;
+    return selfW;
+  }
+
+  const subtreeWidth = {};
+  function computeSubtreeWidth(uid) {
+    const u = units[uid];
+    if (u.children.length === 0) {
+      subtreeWidth[uid] = unitWidth(uid);
+      return subtreeWidth[uid];
+    }
+    const childrenTotal = u.children.reduce((sum, cuid) => {
+      return sum + computeSubtreeWidth(cuid) + UNIT_PADDING;
+    }, -UNIT_PADDING); // subtract one padding (fencepost)
+    subtreeWidth[uid] = Math.max(unitWidth(uid), childrenTotal);
+    return subtreeWidth[uid];
+  }
+  roots.forEach(computeSubtreeWidth);
+
+  // Assign x positions: place each unit centered over its children subtree
+  const unitX = {};
+  const positions = {};
+
+  function assignX(uid, centerX) {
+    const u = units[uid];
+    unitX[uid] = centerX;
+
+    // Position members left to right centered on centerX
+    const selfW = unitWidth(uid);
+    const startX = centerX - selfW / 2;
+    u.members.forEach((p, i) => {
+      positions[p.id] = {
+        x: startX + i * (NODE_W + NODE_GAP),
+        y: genIndex[p.generation] * GEN_GAP,
+        gen: p.generation,
+        h: nodeHeight(p.name),
+      };
+    });
+
+    // Distribute children
+    if (u.children.length === 0) return;
+    const totalChildW = u.children.reduce((s, cuid) => s + subtreeWidth[cuid] + UNIT_PADDING, -UNIT_PADDING);
+    let childX = centerX - totalChildW / 2;
+    u.children.forEach(cuid => {
+      const cw = subtreeWidth[cuid];
+      assignX(cuid, childX + cw / 2);
+      childX += cw + UNIT_PADDING;
+    });
+  }
+
+  // Layout all roots spread across the canvas
+  const totalRootW = roots.reduce((s, uid) => s + subtreeWidth[uid] + UNIT_PADDING * 2, -UNIT_PADDING * 2);
+  let rx = -totalRootW / 2;
+  roots.forEach(uid => {
+    const w = subtreeWidth[uid];
+    assignX(uid, rx + w / 2);
+    rx += w + UNIT_PADDING * 2;
+  });
+
+  // Any person not yet positioned (disconnected nodes) — place them off to the side
+  FAMILY.forEach(p => {
+    if (!positions[p.id]) {
+      positions[p.id] = {
+        x: 2000,
+        y: genIndex[p.generation] * GEN_GAP,
+        gen: p.generation,
+        h: nodeHeight(p.name),
+      };
+    }
+  });
+
+  return { positions, genNums };
+}
+
+// ── DRAW ──────────────────────────────────────────────────
+const svg    = d3.select('#canvas');
+const root   = d3.select('#tree-root');
+let currentActive = null;
+
+function truncate(str, max) {
+  if (!str) return '';
+  return str.length > max ? str.slice(0, max - 1) + '…' : str;
+}
+
+function formatDates(p) {
+  const b = p.birth || '?';
+  const d = p.death || '';
+  return d ? `${b} – ${d}` : `b. ${b}`;
+}
+
+function draw() {
+  root.selectAll('*').remove();
+  const { positions, genNums } = computeLayout();
+
+  // ── GEN LABELS (y position based on index in sorted genNums)
+  const labelG = root.append('g').attr('class', 'gen-labels');
+  genNums.forEach((g, gi) => {
+    labelG.append('text')
+      .attr('class', 'gen-label')
+      .attr('x', -4000)
+      .attr('y', gi * GEN_GAP + NODE_H_MIN / 2 + 4)
+      .text(`Gen ${g}`);
+  });
+
+  // ── PARENT-CHILD LINKS
+  // Draw one line per child, originating from the midpoint between two parents
+  // if both parents are on the same row, otherwise from the single known parent.
+  const linkG = root.append('g').attr('class', 'links');
+  const childDrawn = new Set();
+
+  FAMILY.forEach(p => {
+    const pos = positions[p.id];
+    if (!pos) return;
+
+    p.children.forEach(cid => {
+      if (childDrawn.has(cid)) return; // only draw once per child
+      const child = byId[cid];
+      const cpos = positions[cid];
+      if (!cpos) return;
+
+      // Find all parents of this child that are on the same generation row
+      const parentPositions = (child.parents || [])
+        .map(pid => positions[pid])
+        .filter(pp => pp && Math.abs(pp.y - pos.y) < 10);
+
+      let originX, originY;
+      if (parentPositions.length >= 2) {
+        // Midpoint between the two parents
+        const xs = parentPositions.map(pp => pp.x + NODE_W / 2);
+        originX = (Math.min(...xs) + Math.max(...xs)) / 2;
+        originY = parentPositions[0].y + (parentPositions[0].h || NODE_H_MIN);
+      } else {
+        const ph = pos.h || NODE_H_MIN;
+        originX = pos.x + NODE_W / 2;
+        originY = pos.y + ph;
+      }
+
+      childDrawn.add(cid);
+      const x2 = cpos.x + NODE_W / 2;
+      const y2 = cpos.y;
+      const my = originY + (y2 - originY) / 2;
+      linkG.append('path')
+        .attr('class', 'link-parent')
+        .attr('d', `M${originX},${originY} C${originX},${my} ${x2},${my} ${x2},${y2}`);
+    });
+  });
+
+  // ── SPOUSE LINKS (only draw between nodes on the same generation row)
+  const spouseDrawn = new Set();
+  FAMILY.forEach(p => {
+    const pos = positions[p.id];
+    if (!pos || !p.spouses) return;
+    p.spouses.forEach(sid => {
+      const key = [p.id, sid].sort().join('|');
+      if (spouseDrawn.has(key)) return;
+      spouseDrawn.add(key);
+      const spos = positions[sid];
+      if (!spos) return;
+      // Only draw spouse lines between nodes on the same row
+      if (Math.abs(pos.y - spos.y) > 10) return;
+      const ph = pos.h || NODE_H_MIN;
+      const sh = spos.h || NODE_H_MIN;
+      // Draw from right edge of left node to left edge of right node
+      const leftPos  = pos.x < spos.x ? pos  : spos;
+      const rightPos = pos.x < spos.x ? spos : pos;
+      const lh = leftPos === pos ? ph : sh;
+      const x1 = leftPos.x + NODE_W;
+      const y1 = leftPos.y + lh / 2;
+      const x2 = rightPos.x;
+      const y2 = rightPos.y + (leftPos === pos ? sh : ph) / 2;
+      linkG.append('line')
+        .attr('class', 'link-spouse')
+        .attr('x1', x1).attr('y1', y1)
+        .attr('x2', x2).attr('y2', y2);
+    });
+  });
+
+  // ── NODES
+  const nodeG = root.append('g').attr('class', 'nodes');
+  FAMILY.forEach(p => {
+    const pos = positions[p.id];
+    if (!pos) return;
+
+    const g = nodeG.append('g')
+      .attr('class', 'node-group')
+      .attr('id', `node-${p.id}`)
+      .attr('transform', `translate(${pos.x},${pos.y})`);
+
+    const nh = pos.h || NODE_H_MIN;
+    const nameLines = wrapName(p.name);
+
+    g.append('rect').attr('class', 'node-rect')
+      .attr('width', NODE_W).attr('height', nh).attr('rx', 6);
+
+    g.append('rect').attr('class', 'node-accent')
+      .attr('width', 3).attr('height', nh - 20).attr('x', 0).attr('y', 10).attr('rx', 2);
+
+    // Name — multi-line SVG text
+    const nameG = g.append('text').attr('class', 'node-name').attr('x', 14);
+    nameLines.forEach((line, li) => {
+      nameG.append('tspan')
+        .attr('x', 14)
+        .attr('dy', li === 0 ? '1.1em' : '1.15em')
+        .text(line);
+    });
+
+    const textTop = nameLines.length * 16 + 10;
+
+    g.append('text').attr('class', 'node-dates')
+      .attr('x', 14).attr('y', textTop + 14)
+      .text(formatDates(p));
+
+    if (p.birthplace) {
+      g.append('text').attr('class', 'node-place')
+        .attr('x', 14).attr('y', textTop + 27)
+        .text(truncate(p.birthplace, 26));
+    }
+
+    g.on('click', () => openPanel(p.id))
+     .on('touchend', (e) => { e.preventDefault(); openPanel(p.id); });
+  });
+}
+
+// ── PAN & ZOOM ────────────────────────────────────────────
+const zoom = d3.zoom()
+  .scaleExtent([0.1, 3])
+  .on('zoom', e => root.attr('transform', e.transform));
+
+svg.call(zoom);
+
+function fitAll() {
+  const svgEl = document.getElementById('canvas');
+  const W = svgEl.clientWidth;
+  const H = svgEl.clientHeight;
+  const bounds = root.node().getBBox();
+  if (!bounds.width) return;
+  const scale = Math.min(0.85, Math.min(W / (bounds.width + 80), H / (bounds.height + 120)));
+  const tx = W / 2 - scale * (bounds.x + bounds.width / 2);
+  const ty = H / 2 - scale * (bounds.y + bounds.height / 2) + 32;
+  svg.transition().duration(600)
+    .call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+}
+
+function resetView() {
+  svg.transition().duration(500)
+    .call(zoom.transform, d3.zoomIdentity.translate(
+      document.getElementById('canvas').clientWidth / 2,
+      100
+    ).scale(0.7));
+}
+
+function panToNode(id) {
+  const pos = computeLayout().positions[id];
+  if (!pos) return;
+  const svgEl = document.getElementById('canvas');
+  const W = svgEl.clientWidth;
+  const H = svgEl.clientHeight;
+  const currentT = d3.zoomTransform(svg.node());
+  const scale = Math.max(currentT.k, 0.7);
+  const nh = pos.h || NODE_H_MIN;
+  const tx = W / 2 - scale * (pos.x + NODE_W / 2);
+  const ty = H / 2 - scale * (pos.y + nh / 2);
+  svg.transition().duration(500)
+    .call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+}
+
+document.getElementById('btn-fit').addEventListener('click', fitAll);
+document.getElementById('btn-reset').addEventListener('click', resetView);
+
+// ── PROFILE PANEL ─────────────────────────────────────────
+const panel = document.getElementById('panel');
+
+function openPanel(id) {
+  const p = byId[id];
+  if (!p) return;
+
+  // Highlight node
+  d3.selectAll('.node-group').classed('active', false);
+  d3.select(`#node-${id}`).classed('active', true);
+  currentActive = id;
+
+  // Photos
+  const photosEl = document.getElementById('panel-photos');
+  if (p.photos && p.photos.length > 0) {
+    photosEl.innerHTML = `
+      <div class="photo-gallery">${p.photos.map(src => `<img src="${src}" alt="${p.name}" loading="lazy"/>`).join('')}</div>
+      ${p.photos.length > 1 ? `<div class="photo-count">${p.photos.length} photos</div>` : ''}
+    `;
+  } else {
+    photosEl.innerHTML = `
+      <div class="photo-placeholder">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="24" cy="18" r="8"/>
+          <path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16"/>
+        </svg>
+        <span>No photo yet</span>
+      </div>
+    `;
+  }
+
+  // Name
+  document.getElementById('panel-name').textContent = p.name;
+  const nickEl = document.getElementById('panel-nickname');
+  nickEl.textContent = p.nickname ? `"${p.nickname}"` : '';
+  nickEl.style.display = p.nickname ? 'block' : 'none';
+
+  // Meta
+  const metaEl = document.getElementById('panel-meta');
+  const rows = [];
+  if (p.birth) {
+    const bline = p.birthplace ? `${p.birth} · ${p.birthplace}` : p.birth;
+    rows.push(`<div class="meta-row"><span class="meta-label">Born</span><span class="meta-value">${bline}</span></div>`);
+  }
+  if (p.death) {
+    const dline = p.deathplace ? `${p.death} · ${p.deathplace}` : p.death;
+    rows.push(`<div class="meta-row"><span class="meta-label">Died</span><span class="meta-value">${dline}</span></div>`);
+  }
+  if (!p.death && p.birth) {
+    rows.push(`<div class="meta-row"><span class="meta-label">Status</span><span class="meta-value" style="color:var(--green-light)">Living</span></div>`);
+  }
+  metaEl.innerHTML = rows.join('');
+
+  // Bio
+  document.getElementById('panel-bio').textContent = p.bio || '';
+
+  // Relationships
+  const relsEl = document.getElementById('panel-rels');
+  let relsHtml = '';
+
+  if (p.parents && p.parents.length) {
+    const links = p.parents.map(rid => relLink(rid)).join('');
+    relsHtml += `<div class="rel-section"><div class="rel-label">Parents</div><div class="rel-links">${links}</div></div>`;
+  }
+  if (p.spouses && p.spouses.length) {
+    const links = p.spouses.map(rid => relLink(rid)).join('');
+    relsHtml += `<div class="rel-section"><div class="rel-label">Spouse</div><div class="rel-links">${links}</div></div>`;
+  }
+  if (p.children && p.children.length) {
+    const links = p.children.map(rid => relLink(rid)).join('');
+    relsHtml += `<div class="rel-section"><div class="rel-label">Children</div><div class="rel-links">${links}</div></div>`;
+  }
+
+  relsEl.innerHTML = relsHtml;
+
+  // Wire up rel link clicks
+  relsEl.querySelectorAll('.rel-link').forEach(el => {
+    el.addEventListener('click', () => {
+      const rid = el.dataset.id;
+      openPanel(rid);
+      panToNode(rid);
+    });
+  });
+
+  panel.classList.add('open');
+  panToNode(id);
+}
+
+function relLink(id) {
+  const p = byId[id];
+  if (!p) return '';
+  return `<span class="rel-link" data-id="${id}">${p.name}</span>`;
+}
+
+function closePanel() {
+  panel.classList.remove('open');
+  d3.selectAll('.node-group').classed('active', false);
+  currentActive = null;
+}
+
+document.getElementById('panel-close').addEventListener('click', closePanel);
+svg.on('click', function(e) {
+  if (e.target === this || e.target.tagName === 'rect' && e.target.getAttribute('fill') === 'url(#grid)') {
+    closePanel();
+  }
+});
+
+// ── INIT ──────────────────────────────────────────────────
+draw();
+setTimeout(() => {
+  fitAll();
+}, 100);
+</script>
+</body>
+</html>

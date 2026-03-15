@@ -1,0 +1,13 @@
+id,name,nickname,birth,birthplace,death,deathplace,bio,parents,spouses,children,generation
+ralph-leonard-mccool,Ralph Leonard McCool,,,,,,Son of L.R. and Minnie McCool.,lester-roy-mccool | minnie-sasse-mccool,harriet-mccool,leslie-mccool | thomas-mccool | joseph-mccool | martha-mccool | andrea-mccool | sally-mccool | samuel-mccool | ralph-louis-mccool | frederick-mccool | amy-mccool,8
+harriet-mccool,Harriet Buthod McCool,Sissy,,,,,Wife of Ralph Leonard. Mother of ten.,,ralph-leonard-mccool,,8
+leslie-mccool,Leslie McCool,,1949,Evansville,2018,"Burlington, VT",,ralph-leonard-mccool | harriet-mccool,joe-rivers,augustus-james-brightman | gracie-rivers,9
+thomas-mccool,Thomas McCool,,,Evansville,,,,ralph-leonard-mccool | harriet-mccool,,,9
+joseph-mccool,Joseph McCool,Joe,,Evansville,,,,ralph-leonard-mccool | harriet-mccool,suzanne-eaton-mccool,alex-mccool-wepfer | margaret-mccool-williams,9
+martha-mccool,Martha McCool Thorbeck,,,Evansville,,,,ralph-leonard-mccool | harriet-mccool,thomas-thorbeck,frances-thorbeck-jost,9
+andrea-mccool,Andrea Louise McCool,Andie,1953,Evansville,1983,"Evansville, IN",,ralph-leonard-mccool | harriet-mccool,,,9
+sally-mccool,Sally McCool Small,,,Evansville,,,,ralph-leonard-mccool | harriet-mccool,jeff-small,sarah-sasse-small | gus-small | hattie-small | sam-small | ellie-small |,9
+samuel-mccool,Samuel McCool,,,Evansville,2009,"Lebanon, TN",,ralph-leonard-mccool | harriet-mccool,roxie-mccool,alan-mccool | cade-mccool,9
+ralph-louis-mccool,Ralph Louis McCool,Ubbie,1961,Evansville,,,,ralph-leonard-mccool | harriet-mccool,julie-rexing-mccool,austin-mccool | martin-mccool | mitchell-mccool,9
+frederick-mccool,Frederick McCool,,,Evansville,,,,ralph-leonard-mccool | harriet-mccool,wendy-weber-mccool,sadie-mccool | annie-mccool,9
+amy-mccool,Amy McCool Henton,,,Evansville,,,,ralph-leonard-mccool | harriet-mccool,keith-henton,dannie-henton | edie-henton | andie-henton | carlie-henton | lucie-henton,9
