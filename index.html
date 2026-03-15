@@ -355,14 +355,36 @@
       color: var(--gold-light);
     }
 
-    /* ── LEGEND ──────────────────────────────────── */
-    #legend {
+    /* ── GEN RAIL (floating left-side generation labels) ─ */
+    #gen-rail {
       position: fixed;
-      bottom: 24px; left: 24px;
+      top: 0; left: 0;
+      width: 72px;
+      height: 100%;
+      pointer-events: none;
       z-index: 100;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      overflow: hidden;
+    }
+    .gen-rail-label {
+      position: absolute;
+      left: 8px;
+      transform: translateY(-50%);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .gen-rail-line {
+      position: absolute;
+      left: 58px;
+      width: 1px;
+      background: var(--border);
+      transform: translateY(-50%);
+      opacity: 0.5;
     }
     .legend-item {
       display: flex;
@@ -443,11 +465,8 @@
   </div>
 </div>
 
-<!-- LEGEND -->
-<div id="legend">
-  <div class="legend-item"><div class="legend-line"></div> Parent / Child</div>
-  <div class="legend-item"><div class="legend-line dashed"></div> Spouse</div>
-</div>
+<!-- GEN RAIL -->
+<div id="gen-rail"></div>
 
 <div id="hint">Scroll to zoom · Drag to pan · Click a node</div>
 
@@ -664,7 +683,7 @@ function draw() {
   root.selectAll('*').remove();
   const { positions, genNums } = computeLayout();
 
-  // ── GEN LABELS (y position based on index in sorted genNums)
+  // ── GENERATION LABELS on canvas (far left, stay with tree)
   const labelG = root.append('g').attr('class', 'gen-labels');
   genNums.forEach((g, gi) => {
     labelG.append('text')
@@ -673,6 +692,8 @@ function draw() {
       .attr('y', gi * GEN_GAP + NODE_H_MIN / 2 + 4)
       .text(`Gen ${g}`);
   });
+
+
 
   // ── PARENT-CHILD LINKS
   // Draw one line per child, originating from the midpoint between two parents
@@ -796,9 +817,43 @@ function draw() {
 // ── PAN & ZOOM ────────────────────────────────────────────
 const zoom = d3.zoom()
   .scaleExtent([0.1, 3])
-  .on('zoom', e => root.attr('transform', e.transform));
+  .on('zoom', e => {
+    root.attr('transform', e.transform);
+    updateGenRail(e.transform);
+  });
 
 svg.call(zoom);
+
+// ── GEN RAIL UPDATE ───────────────────────────────────────
+// Called on every pan/zoom. Positions gen labels at the correct
+// screen Y for each generation row, always visible on the left.
+let _genRailData = []; // set after draw()
+
+function updateGenRail(transform) {
+  const rail = document.getElementById('gen-rail');
+  if (!rail || !_genRailData.length) return;
+  const svgEl = document.getElementById('canvas');
+  const H = svgEl.clientHeight;
+
+  rail.innerHTML = '';
+  _genRailData.forEach(({ g, treeY }) => {
+    const screenY = transform.applyY(treeY);
+    // Only show if on screen
+    if (screenY < -20 || screenY > H + 20) return;
+
+    const label = document.createElement('div');
+    label.className = 'gen-rail-label';
+    label.style.top = screenY + 'px';
+    label.textContent = `Gen ${g}`;
+    rail.appendChild(label);
+
+    const line = document.createElement('div');
+    line.className = 'gen-rail-line';
+    line.style.top = screenY + 'px';
+    line.style.height = '1px';
+    rail.appendChild(line);
+  });
+}
 
 function fitAll() {
   const svgEl = document.getElementById('canvas');
@@ -810,7 +865,8 @@ function fitAll() {
   const tx = W / 2 - scale * (bounds.x + bounds.width / 2);
   const ty = H / 2 - scale * (bounds.y + bounds.height / 2) + 32;
   svg.transition().duration(600)
-    .call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+    .call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale))
+    .on('end', () => updateGenRail(d3.zoomTransform(svg.node())));
 }
 
 function resetView() {
@@ -948,6 +1004,16 @@ svg.on('click', function(e) {
 
 // ── INIT ──────────────────────────────────────────────────
 draw();
+
+// Populate gen rail data after layout is computed
+(function() {
+  const { positions, genNums } = computeLayout();
+  _genRailData = genNums.map((g, gi) => ({
+    g,
+    treeY: gi * GEN_GAP + NODE_H_MIN / 2,
+  }));
+})();
+
 setTimeout(() => {
   fitAll();
 }, 100);
