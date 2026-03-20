@@ -12,23 +12,26 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:           #0e0d0b;
-      --surface:      #1a1814;
-      --surface2:     #242018;
-      --border:       #3a3428;
-      --gold:         #c9a84c;
-      --gold-light:   #e8c97a;
-      --gold-dim:     #7a6330;
-      --cream:        #f0e8d8;
-      --cream-dim:    #a89880;
-      --text:         #e8dcc8;
-      --text-dim:     #8a7d6a;
-      --green:        #2d4a2d;
-      --green-light:  #4a7c4a;
-      --link:         #c9a84c;
-      --node-w:       160px;
-      --node-h:       72px;
-      --node-r:       6px;
+      --bg:              #111814;
+      --surface:         #1a2620;
+      --surface2:        #1f2e27;
+      --surface-spouse:  #1a2230;
+      --border:          #2c4038;
+      --border-spouse:   #2a3650;
+      --green:           #4a9e6e;
+      --green-light:     #72c496;
+      --green-dim:       #2d6648;
+      --blue:            #5a8fa8;
+      --blue-light:      #7ab8d4;
+      --blue-dim:        #3a6070;
+      --cream:           #ddeee5;
+      --cream-dim:       #8aa898;
+      --text:            #d8ece0;
+      --text-dim:        #7a9485;
+      --link:            #4a9e6e;
+      --node-w:          160px;
+      --node-h:          72px;
+      --node-r:          6px;
     }
 
     html, body {
@@ -57,7 +60,7 @@
       font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
       font-weight: 700;
-      color: var(--gold);
+      color: var(--green);
       letter-spacing: 0.04em;
     }
 
@@ -89,8 +92,8 @@
       transition: all 0.15s;
     }
     .ctrl-btn:hover {
-      border-color: var(--gold-dim);
-      color: var(--gold-light);
+      border-color: var(--green-dim);
+      color: var(--green-light);
     }
 
     /* ── CANVAS ──────────────────────────────────── */
@@ -103,10 +106,8 @@
     /* ── TREE NODES ──────────────────────────────── */
     .node-group { cursor: pointer; }
 
+    /* Blood relatives — green tinted */
     .node-rect {
-      width: var(--node-w);
-      height: var(--node-h);
-      rx: var(--node-r);
       fill: var(--surface);
       stroke: var(--border);
       stroke-width: 1.5;
@@ -115,21 +116,31 @@
     .node-group:hover .node-rect,
     .node-group.active .node-rect {
       fill: var(--surface2);
-      stroke: var(--gold);
+      stroke: var(--green);
+      stroke-width: 2;
+    }
+
+    /* Spouse / in-law nodes — blue tinted */
+    .node-rect.spouse {
+      fill: var(--surface-spouse);
+      stroke: var(--border-spouse);
+    }
+    .node-group:hover .node-rect.spouse,
+    .node-group.active .node-rect.spouse {
+      fill: #1f2a3a;
+      stroke: var(--blue);
       stroke-width: 2;
     }
 
     .node-accent {
-      width: 3px;
-      height: 40px;
-      x: 0;
-      y: 16px;
-      rx: 2;
-      fill: var(--gold-dim);
+      fill: var(--green-dim);
       transition: fill 0.2s;
     }
+    .node-accent.spouse { fill: var(--blue-dim); }
     .node-group:hover .node-accent,
-    .node-group.active .node-accent { fill: var(--gold); }
+    .node-group.active .node-accent { fill: var(--green); }
+    .node-group:hover .node-accent.spouse,
+    .node-group.active .node-accent.spouse { fill: var(--blue); }
 
     .node-name {
       font-family: 'Playfair Display', serif;
@@ -146,9 +157,10 @@
     .node-place {
       font-family: 'Lato', sans-serif;
       font-size: 10px;
-      fill: var(--gold-dim);
+      fill: var(--green-dim);
       font-style: italic;
     }
+    .node-place.spouse { fill: var(--blue-dim); }
 
     /* ── LINKS ───────────────────────────────────── */
     .link-parent {
@@ -158,7 +170,7 @@
     }
     .link-spouse {
       fill: none;
-      stroke: var(--gold-dim);
+      stroke: var(--blue-dim);
       stroke-width: 1;
       stroke-dasharray: 4 3;
     }
@@ -167,7 +179,7 @@
     .gen-label {
       font-family: 'Lato', sans-serif;
       font-size: 10px;
-      fill: #3a3428;
+      fill: #2a3d35;
       letter-spacing: 0.2em;
       text-transform: uppercase;
     }
@@ -206,7 +218,7 @@
       line-height: 1;
       z-index: 10;
     }
-    #panel-close:hover { border-color: var(--gold-dim); color: var(--gold); }
+    #panel-close:hover { border-color: var(--green-dim); color: var(--green); }
 
     #panel-photos {
       width: 100%;
@@ -286,7 +298,7 @@
       font-family: 'Playfair Display', serif;
       font-style: italic;
       font-size: 0.9rem;
-      color: var(--gold-dim);
+      color: var(--green-dim);
       margin-bottom: 12px;
     }
 
@@ -328,7 +340,7 @@
       font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 0.15em;
-      color: var(--gold-dim);
+      color: var(--green-dim);
       margin-bottom: 8px;
     }
     .rel-links {
@@ -338,7 +350,7 @@
     }
     .rel-link {
       font-size: 0.78rem;
-      color: var(--gold);
+      color: var(--green);
       background: rgba(201, 168, 76, 0.08);
       border: 1px solid var(--gold-dim);
       padding: 4px 10px;
@@ -351,8 +363,8 @@
     }
     .rel-link:hover {
       background: rgba(201, 168, 76, 0.18);
-      border-color: var(--gold);
-      color: var(--gold-light);
+      border-color: var(--green);
+      color: var(--green-light);
     }
 
     /* ── GEN RAIL (floating left-side generation labels) ─ */
@@ -374,7 +386,7 @@
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--gold-dim);
+      color: var(--green-dim);
       white-space: nowrap;
       transition: opacity 0.2s;
     }
@@ -473,10 +485,10 @@
 <script src="family.js"></script>
 <script>
 // ── CONSTANTS ──────────────────────────────────────────────
-const NODE_W     = 180;
+const NODE_W     = 160;
 const NODE_H_MIN = 72;    // minimum node height — grows for long names
-const GEN_GAP    = 180;   // vertical space between generations
-const NODE_GAP   = 28;    // horizontal gap between siblings
+const GEN_GAP    = 140;   // vertical space between generations
+const NODE_GAP   = 16;    // horizontal gap between siblings
 const SPOUSE_GAP = 200;   // horizontal gap between spouses
 const NAME_MAX_W = 148;   // max pixel width for name text before wrapping
 const CHARS_PER_LINE = 20; // approx chars per line for wrapping
@@ -510,37 +522,19 @@ const byId = {};
 FAMILY.forEach(p => byId[p.id] = p);
 
 // ── LAYOUT ENGINE ─────────────────────────────────────────
-// Recursive subtree layout: each node is positioned based on the span
-// of its descendants, so children cluster under their parents.
-//
-// Algorithm:
-//  1. Find all root nodes (no parents, or parents in an earlier gen)
-//  2. Recursively compute the "width" each subtree needs
-//  3. Assign x positions bottom-up so siblings are spread under their parents
-//  4. Y position is simply generation index * GEN_GAP
+// Recursive subtree layout with sibling proximity constraint.
+// Siblings are limited to a max spread so parent lines stay reasonable.
 
 function computeLayout() {
   const genNums = [...new Set(FAMILY.map(p => p.generation))].sort((a,b)=>a-b);
   const genIndex = {};
   genNums.forEach((g, i) => genIndex[g] = i);
 
-  // Build a map: for each person, who are their children (union from data)
-  const childrenOf = {};
-  FAMILY.forEach(p => { childrenOf[p.id] = []; });
-  FAMILY.forEach(p => {
-    (p.children || []).forEach(cid => {
-      if (childrenOf[cid] !== undefined) {
-        if (!childrenOf[p.id].includes(cid)) childrenOf[p.id].push(cid);
-      }
-    });
-  });
-
-  // A "family unit" is a person + their same-generation spouses.
-  // We treat units as the atomic layout node.
-  // Build units: each unit has a primary (first encountered) and spouses.
-  const unitOf = {};   // id -> unit id (primary person's id)
-  const units  = {};   // unit id -> { members: [], children: [] }
-  const placed = new Set();
+  const PAD = 12;
+  // ── BUILD UNITS ─────────────────────────────────────────
+  const unitOf = {};
+  const units  = {};
+  const placed  = new Set();
 
   FAMILY.forEach(p => {
     if (placed.has(p.id)) return;
@@ -548,7 +542,6 @@ function computeLayout() {
     const unit = { members: [p], children: [] };
     units[p.id] = unit;
     unitOf[p.id] = p.id;
-
     (p.spouses || []).forEach(sid => {
       const s = byId[sid];
       if (s && s.generation === p.generation && !placed.has(sid)) {
@@ -559,105 +552,95 @@ function computeLayout() {
     });
   });
 
-  // Wire unit children: a unit's children are the units of its members' children
-  const unitChildrenSet = {};
-  Object.keys(units).forEach(uid => unitChildrenSet[uid] = new Set());
-
+  // Wire children
+  const ucs = {};
+  Object.keys(units).forEach(uid => ucs[uid] = new Set());
   FAMILY.forEach(p => {
     const uid = unitOf[p.id];
     (p.children || []).forEach(cid => {
-      const childUnit = unitOf[cid];
-      if (childUnit && childUnit !== uid) {
-        unitChildrenSet[uid].add(childUnit);
-      }
+      const cuid = unitOf[cid];
+      if (cuid && cuid !== uid) ucs[uid].add(cuid);
     });
   });
-  Object.keys(units).forEach(uid => {
-    units[uid].children = [...unitChildrenSet[uid]];
+  Object.keys(units).forEach(uid => units[uid].children = [...ucs[uid]]);
+
+  // ── ROOTS vs FLOATERS ───────────────────────────────────
+  const hasParent = new Set();
+  Object.keys(units).forEach(uid => units[uid].children.forEach(c => hasParent.add(c)));
+  const allRoots = Object.keys(units).filter(uid => !hasParent.has(uid));
+  const roots = allRoots.filter(uid => {
+    if (units[uid].children.length > 0) return true;
+    for (const p of units[uid].members)
+      for (const sid of (p.spouses || [])) {
+        const suid = unitOf[sid];
+        if (suid && (units[suid].children.length > 0 || hasParent.has(suid))) return false;
+      }
+    return true;
   });
+  const floaters = allRoots.filter(uid => !roots.includes(uid));
 
-  // Find root units (no parent units, or parents in strictly earlier gens)
-  const hasParentUnit = new Set();
-  Object.keys(units).forEach(uid => {
-    units[uid].children.forEach(cuid => hasParentUnit.add(cuid));
-  });
-  const roots = Object.keys(units).filter(uid => !hasParentUnit.has(uid));
-
-  // Compute subtree width recursively (in unit-widths)
-  // Unit width = number of members * NODE_W + (members-1) * NODE_GAP + spouse gap
-  const UNIT_PADDING = NODE_GAP * 2; // extra breathing room between sibling units
-
-  function unitWidth(uid) {
-    const u = units[uid];
-    const selfW = u.members.length * NODE_W + (u.members.length - 1) * NODE_GAP;
-    return selfW;
+  // ── UNIT WIDTH & SUBTREE WIDTH ────────────────────────────
+  function uw(uid) {
+    return units[uid].members.length * NODE_W + (units[uid].members.length - 1) * NODE_GAP;
   }
 
-  const subtreeWidth = {};
-  function computeSubtreeWidth(uid) {
+  const sw = {};
+  function calcSW(uid) {
     const u = units[uid];
-    if (u.children.length === 0) {
-      subtreeWidth[uid] = unitWidth(uid);
-      return subtreeWidth[uid];
-    }
-    const childrenTotal = u.children.reduce((sum, cuid) => {
-      return sum + computeSubtreeWidth(cuid) + UNIT_PADDING;
-    }, -UNIT_PADDING); // subtract one padding (fencepost)
-    subtreeWidth[uid] = Math.max(unitWidth(uid), childrenTotal);
-    return subtreeWidth[uid];
+    if (u.children.length === 0) { sw[uid] = uw(uid); return sw[uid]; }
+    const childSum = u.children.reduce((s, c) => s + calcSW(c) + PAD, -PAD);
+    sw[uid] = Math.max(uw(uid), childSum);
+    return sw[uid];
   }
-  roots.forEach(computeSubtreeWidth);
+  roots.forEach(uid => calcSW(uid));
 
-  // Assign x positions: place each unit centered over its children subtree
-  const unitX = {};
+  // ── PLACE TOP-DOWN ──────────────────────────────────────
   const positions = {};
-
-  function assignX(uid, centerX) {
+  function place(uid, cx) {
     const u = units[uid];
-    unitX[uid] = centerX;
-
-    // Position members left to right centered on centerX
-    const selfW = unitWidth(uid);
-    const startX = centerX - selfW / 2;
+    const lx = cx - uw(uid) / 2;
     u.members.forEach((p, i) => {
       positions[p.id] = {
-        x: startX + i * (NODE_W + NODE_GAP),
+        x: lx + i * (NODE_W + NODE_GAP),
         y: genIndex[p.generation] * GEN_GAP,
         gen: p.generation,
         h: nodeHeight(p.name),
       };
     });
-
-    // Distribute children
-    if (u.children.length === 0) return;
-    const totalChildW = u.children.reduce((s, cuid) => s + subtreeWidth[cuid] + UNIT_PADDING, -UNIT_PADDING);
-    let childX = centerX - totalChildW / 2;
-    u.children.forEach(cuid => {
-      const cw = subtreeWidth[cuid];
-      assignX(cuid, childX + cw / 2);
-      childX += cw + UNIT_PADDING;
+    if (!u.children.length) return;
+    const totalCW = u.children.reduce((s, c) => s + sw[c] + PAD, -PAD);
+    let cx2 = cx - totalCW / 2;
+    u.children.forEach(c => {
+      place(c, cx2 + sw[c] / 2);
+      cx2 += sw[c] + PAD;
     });
   }
 
-  // Layout all roots spread across the canvas
-  const totalRootW = roots.reduce((s, uid) => s + subtreeWidth[uid] + UNIT_PADDING * 2, -UNIT_PADDING * 2);
-  let rx = -totalRootW / 2;
+  const totalRW = roots.reduce((s, uid) => s + sw[uid] + PAD, -PAD);
+  let rx = -totalRW / 2;
   roots.forEach(uid => {
-    const w = subtreeWidth[uid];
-    assignX(uid, rx + w / 2);
-    rx += w + UNIT_PADDING * 2;
+    place(uid, rx + sw[uid] / 2);
+    rx += sw[uid] + PAD;
   });
 
-  // Any person not yet positioned (disconnected nodes) — place them off to the side
+  // ── FLOATERS: place next to spouse ─────────────────────
+  floaters.forEach(uid => {
+    const u = units[uid];
+    let sp = null;
+    for (const p of u.members)
+      for (const sid of (p.spouses || []))
+        if (positions[sid]) { sp = positions[sid]; break; }
+    const by = sp ? sp.y : (genIndex[u.members[0].generation] || 0) * GEN_GAP;
+    const bx = sp ? sp.x + NODE_W + NODE_GAP : 2000;
+    u.members.forEach((p, i) => {
+      positions[p.id] = { x: bx + i*(NODE_W+NODE_GAP), y: by, gen: p.generation, h: nodeHeight(p.name) };
+    });
+  });
+
+  // Fallback
   FAMILY.forEach(p => {
-    if (!positions[p.id]) {
-      positions[p.id] = {
-        x: 2000,
-        y: genIndex[p.generation] * GEN_GAP,
-        gen: p.generation,
-        h: nodeHeight(p.name),
-      };
-    }
+    if (!positions[p.id])
+      positions[p.id] = { x: 2000, y: (genIndex[p.generation]||0)*GEN_GAP, gen: p.generation, h: nodeHeight(p.name) };
   });
 
   return { positions, genNums };
@@ -768,12 +751,40 @@ function draw() {
     });
   });
 
+  // ── IDENTIFY BLOOD RELATIVES ────────────────────────────
+  // Anyone with a McCool parent (or who IS a McCool) is blood.
+  // Everyone else (spouses, in-laws) gets the blue/spouse treatment.
+  const bloodIds = new Set();
+  function markBlood(id) {
+    if (bloodIds.has(id)) return;
+    bloodIds.add(id);
+    const p = byId[id];
+    if (!p) return;
+    (p.children || []).forEach(markBlood);
+  }
+  // Seed from the two root ancestors
+  markBlood('adam-mccool');
+  markBlood('margaret-mcgraw-mccool');
+  // Also mark the Rexing/Buthod lines as their own blood (they're blood to Julie/Harriet)
+  // but visually we want McCool blood = green, in-laws = blue
+  // So: green if surname is McCool or if they are an ancestor of Austin through McCool line
+  const mcCoolLineIds = new Set();
+  function markMcCoolLine(id) {
+    if (mcCoolLineIds.has(id)) return;
+    mcCoolLineIds.add(id);
+    const p = byId[id];
+    if (!p) return;
+    (p.children || []).forEach(markMcCoolLine);
+  }
+  markMcCoolLine('adam-mccool');
+
   // ── NODES
   const nodeG = root.append('g').attr('class', 'nodes');
   FAMILY.forEach(p => {
     const pos = positions[p.id];
     if (!pos) return;
 
+    const isBlood = mcCoolLineIds.has(p.id);
     const g = nodeG.append('g')
       .attr('class', 'node-group')
       .attr('id', `node-${p.id}`)
@@ -782,10 +793,12 @@ function draw() {
     const nh = pos.h || NODE_H_MIN;
     const nameLines = wrapName(p.name);
 
-    g.append('rect').attr('class', 'node-rect')
+    g.append('rect')
+      .attr('class', isBlood ? 'node-rect' : 'node-rect spouse')
       .attr('width', NODE_W).attr('height', nh).attr('rx', 6);
 
-    g.append('rect').attr('class', 'node-accent')
+    g.append('rect')
+      .attr('class', isBlood ? 'node-accent' : 'node-accent spouse')
       .attr('width', 3).attr('height', nh - 20).attr('x', 0).attr('y', 10).attr('rx', 2);
 
     // Name — multi-line SVG text
@@ -804,7 +817,7 @@ function draw() {
       .text(formatDates(p));
 
     if (p.birthplace) {
-      g.append('text').attr('class', 'node-place')
+      g.append('text').attr('class', isBlood ? 'node-place' : 'node-place spouse')
         .attr('x', 14).attr('y', textTop + 27)
         .text(truncate(p.birthplace, 26));
     }
